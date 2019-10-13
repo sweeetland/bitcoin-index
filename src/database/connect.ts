@@ -1,5 +1,5 @@
 import { createConnection } from 'typeorm';
-import { DB_PORT, DB_USER, DB_NAME } from '../config/env';
+import { DB_PORT, DB_USER, DB_NAME, NODE_ENV } from '../config/env';
 
 const connectDatabase = async () =>
   await createConnection({
@@ -10,8 +10,8 @@ const connectDatabase = async () =>
     password: '',
     database: DB_NAME,
     synchronize: true,
-    logging: process.env.NODE_ENV === 'development',
-    dropSchema: process.env.NODE_ENV === 'test',
+    logging: NODE_ENV === 'development',
+    dropSchema: NODE_ENV === 'test',
     entities: ['src/entities/*.*']
   });
 
