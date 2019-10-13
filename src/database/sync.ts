@@ -4,11 +4,12 @@ import bitcoin from '../services/bitcoin';
 import { getOPReturnsFromBlock } from './shared';
 import { Block, Transaction } from '../types/bitcoin';
 import { OPReturn } from '../entities/OPReturn';
+import { ZMQ_URL } from '../config/env';
 
 const syncDatabaseWithBitcoind = async (): Promise<void> => {
   try {
     const socket = zmq.socket('sub');
-    const address = 'tcp://127.0.0.1:3000';
+    const address = ZMQ_URL;
 
     socket.connect(address);
 
@@ -33,6 +34,7 @@ const syncDatabaseWithBitcoind = async (): Promise<void> => {
       if (messageType === 'hashtx') {
         // getrawtransaction will only work for transactions that your wallet is indexing
         // by default it only indexes transactions that affect your wallet or in the mempool of your node
+        // occasionally this call fails gracefully but you will see errors in console
         const tx: Transaction = await bitcoin('getrawtransaction', [
           hash,
           true
