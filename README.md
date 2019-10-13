@@ -1,4 +1,4 @@
-# Bitcoin opreturn API using Node.js, Express and Postgresql.
+# Bitcoin OP_RETURN API with Node.js, Express and Postgresql.
 
 ## Project
 
@@ -14,11 +14,11 @@ It should then return the associated transaction hash and block hash. You can us
 
 ## Rules
 
-A) Use either Node.js v10 or v12
-B) You can use ANY 3rd-party npm library
-C) You must use Postgres as the database
-D) You can use the Bitcoin mainnet or testnet
-E) You must use bitcoind
+- A) Use either Node.js v10 or v12
+- B) You can use ANY 3rd-party npm library
+- C) You must use Postgres as the database
+- D) You can use the Bitcoin mainnet or testnet
+- E) You must use bitcoind
 
 If you're using the mainnet, index higher than the blockheight 500,000. If you're using the testnet only index higher than 1,000,000.
 
