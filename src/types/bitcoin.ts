@@ -67,6 +67,7 @@ export type Transaction = {
   locktime: number;
   vin: TxIn[];
   vout: TxOut[];
+  blockhash?: string;
 };
 
 type TxIn = {
