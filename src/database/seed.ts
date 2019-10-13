@@ -24,7 +24,7 @@ import { Block } from '../types/bitcoin';
 
 async function copyOPReturnsToDB(
   blockHash: string,
-  opReturns = []
+  opReturns: OPReturn[] = []
 ): Promise<void> {
   try {
     const block: Block = await bitcoin.getBlock(blockHash, 2);
@@ -34,7 +34,7 @@ async function copyOPReturnsToDB(
       return;
     }
 
-    if (Buffer.from(opReturns).byteLength > 100) {
+    if (opReturns.length > 150) {
       await OPReturn.insert(opReturns);
       return; // <-- only taking first chunk of data because i've had to prune local blockchain
     }

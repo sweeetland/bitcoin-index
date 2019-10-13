@@ -49,12 +49,14 @@ const syncDatabaseWithBitcoind = async (): Promise<void> => {
           const asm = vout.scriptPubKey.asm;
           if (asm.includes('OP_RETURN')) {
             console.log('message received: new tx with opreturn');
-            OPReturn.insert({
-              body: asm,
-              txhash: tx.hash,
-              blockhash,
-              blockheight
-            });
+            OPReturn.save(
+              new OPReturn({
+                body: asm,
+                txhash: tx.hash,
+                blockhash,
+                blockheight
+              })
+            );
           }
         });
       }

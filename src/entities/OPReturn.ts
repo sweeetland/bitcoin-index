@@ -8,6 +8,16 @@ import {
 
 @Entity()
 export class OPReturn extends BaseEntity {
+  public constructor(data?) {
+    super();
+    if (data) {
+      this.body = data.body;
+      this.txhash = data.txhash;
+      this.blockhash = data.blockhash;
+      this.blockheight = data.blockheight;
+    }
+  }
+
   @PrimaryGeneratedColumn()
   id?: number;
 

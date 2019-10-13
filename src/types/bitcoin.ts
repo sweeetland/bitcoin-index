@@ -1,3 +1,5 @@
+// types copied from this PR: https://github.com/ruimarinho/bitcoin-core/pull/65
+
 export interface ClientConstructorOption {
   agentOptions?: any;
   headers?: boolean;
