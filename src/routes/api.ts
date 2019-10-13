@@ -14,7 +14,7 @@ api.get('/opreturn/:opReturnData', async (req: Request, res: Response) => {
     const query = await OPReturn.find({ body: opReturnData });
 
     if (query.length === 0) {
-      res.status(404).send(`No match found for : ${opReturnData}`);
+      return res.status(404).send(`No match found for : ${opReturnData}`);
     }
 
     const data = query.map(q => ({
