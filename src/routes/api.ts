@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express';
+import { OPReturn } from '../entities/OPReturn';
 
 const api = Router();
 
@@ -6,11 +7,23 @@ api.get('/test', (req: Request, res: Response) =>
   res.json({ msg: 'api online!' })
 );
 
-api.get('/opreturn/:op_return', async (req: Request, res: Response) => {
+api.get('/opreturn/:opReturnData', async (req: Request, res: Response) => {
   try {
-    const { op_return } = req.params;
+    const { opReturnData } = req.params;
 
-    return res.json({ op_return });
+    const query = await OPReturn.find({ body: opReturnData });
+
+    if (query.length === 0) {
+      res.status(404).send(`No match found for : ${opReturnData}`);
+    }
+
+    const data = query.map(q => ({
+      body: q.body,
+      txhash: q.txhash,
+      blockhash: q.blockhash
+    }));
+
+    return res.json(data);
   } catch (error) {
     console.error(error);
     return res.status(500).send('Ooops, something went wrong there!');

@@ -4,7 +4,7 @@
   "author": "James Sweetland",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node-dev --respawn --clear --no-notify src/index.ts",
+    "start": "env-cmd -f ./src/config/dev.env ts-node-dev --respawn --clear --no-notify src/index.ts",
     "db:seed": "env-cmd -f ./src/config/dev.env ts-node ./src/database/seed.ts"
   },
   "devDependencies": {
