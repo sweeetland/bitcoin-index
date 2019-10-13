@@ -22,9 +22,9 @@ const syncDatabaseWithBitcoind = async (): Promise<void> => {
 
       if (messageType === 'hashblock') {
         console.log('message received: new block');
-        const block: Block = await bitcoin.getBlock(hash, 2);
+        const block: Block = await bitcoin('getblock', [hash, 2]);
 
-        let opReturns = [];
+        let opReturns: OPReturn[] = [];
         opReturns = getOPReturnsFromBlock(block, opReturns);
 
         await OPReturn.save(opReturns);
@@ -33,15 +33,17 @@ const syncDatabaseWithBitcoind = async (): Promise<void> => {
       if (messageType === 'hashtx') {
         // getrawtransaction will only work for transactions that your wallet is indexing
         // by default it only indexes transactions that affect your wallet or in the mempool of your node
-        // sometimes causes app to crash with an unhandled exception - better to use a different library
-        const tx: Transaction = await bitcoin.getRawTransaction(hash, true);
+        const tx: Transaction = await bitcoin('getrawtransaction', [
+          hash,
+          true
+        ]);
 
         // tx.blockhash is only available with bitcoind -txindex enabled
         // this requires the full blockchain to be saved on disk (not in prune mode)
         const blockhash = tx.blockhash;
         let blockheight: number;
         if (blockhash) {
-          const block: Block = await bitcoin.getBlock(hash, 2);
+          const block: Block = await bitcoin('getblock', [hash, 2]);
           blockheight = block.height;
         }
 

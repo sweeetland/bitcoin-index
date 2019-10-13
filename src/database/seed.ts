@@ -1,5 +1,3 @@
-// This file should only be ran as a script in package.json
-
 import connectDb from './connect';
 import bitcoin from '../services/bitcoin';
 import { OPReturn } from '../entities/OPReturn';
@@ -14,7 +12,7 @@ import { Block } from '../types/bitcoin';
 
     console.log('seeding database: ', connection.options.database);
 
-    const blockChainInfo = await bitcoin.getBlockchainInfo();
+    const blockChainInfo = await bitcoin('getblockchaininfo');
 
     await copyOPReturnsToDB(blockChainInfo.bestblockhash);
   } catch (error) {
@@ -27,7 +25,7 @@ async function copyOPReturnsToDB(
   opReturns: OPReturn[] = []
 ): Promise<void> {
   try {
-    const block: Block = await bitcoin.getBlock(blockHash, 2);
+    const block: Block = await bitcoin('getblock', [blockHash, 2]);
 
     if (block.height === 0) {
       await OPReturn.insert(opReturns);

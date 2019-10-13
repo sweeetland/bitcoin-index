@@ -25,7 +25,7 @@
     "typescript": "^3.6.4"
   },
   "dependencies": {
-    "bitcoin-core": "^3.0.0",
+    "@carnesen/bitcoin-rpc": "^0.0.0",
     "express": "^4.17.1",
     "pg": "^7.12.1",
     "reflect-metadata": "^0.1.13",

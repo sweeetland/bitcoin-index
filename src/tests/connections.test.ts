@@ -7,6 +7,6 @@ test('should connect to database', async () => {
 });
 
 test('should connect to bitcoind', async () => {
-  const blockChainInfo = await bitcoin.getBlockchainInfo();
+  const blockChainInfo = await bitcoin('getblockchaininfo');
   expect(blockChainInfo).not.toBe(null);
 });

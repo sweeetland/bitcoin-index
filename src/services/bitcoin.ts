@@ -1,18 +1,9 @@
-import * as Bitcoin from 'bitcoin-core';
+import { createBitcoinRpc } from '@carnesen/bitcoin-rpc';
 
-import { ClientConstructorOption } from '../types/bitcoin';
-import {
-  RPC_NETWORK,
-  RPC_PASSWORD,
-  RPC_USERNAME,
-  RPC_PORT
-} from '../config/env';
+import { RPC_PASSWORD, RPC_USERNAME, RPC_PORT } from '../config/env';
 
-const bitcoin = new Bitcoin({
-  network: RPC_NETWORK,
-  username: RPC_USERNAME,
-  password: RPC_PASSWORD,
-  port: RPC_PORT
-} as ClientConstructorOption);
+const bitcoin = createBitcoinRpc(
+  `http://${RPC_USERNAME}:${RPC_PASSWORD}@127.0.0.1:${RPC_PORT}/`
+);
 
 export { bitcoin as default };
