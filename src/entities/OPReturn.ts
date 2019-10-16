@@ -5,10 +5,11 @@ import {
   BaseEntity,
   Index
 } from 'typeorm';
+import { BLOCKHEIGHT_INDEX } from '../config/env';
 
 @Entity()
-export class OPReturn extends BaseEntity {
-  public constructor(data?) {
+export default class OPReturn extends BaseEntity {
+  public constructor(data: any) {
     super();
     if (data) {
       this.body = data.body;
@@ -21,7 +22,7 @@ export class OPReturn extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Index({ where: `"blockheight" > 1000000` })
+  @Index({ where: `"blockheight" > ${BLOCKHEIGHT_INDEX}` })
   @Column()
   body: string;
 
