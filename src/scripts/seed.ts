@@ -1,12 +1,12 @@
-import connectDb from './connect';
 import bitcoin from '../services/bitcoin';
-import { OPReturn } from '../entities/OPReturn';
-import { getOPReturnsFromBlock } from './shared';
+import OPReturn from '../entities/OPReturn';
+import { getOPReturnsFromBlock } from '../helpers/index';
 import { Block } from '../types/bitcoin';
+import db from '../database';
 
 (async () => {
   try {
-    const connection = await connectDb();
+    const connection = await db.connect();
 
     await OPReturn.clear();
 
@@ -14,13 +14,13 @@ import { Block } from '../types/bitcoin';
 
     const blockChainInfo = await bitcoin('getblockchaininfo');
 
-    await copyOPReturnsToDB(blockChainInfo.bestblockhash);
+    await searchBlock(blockChainInfo.bestblockhash);
   } catch (error) {
     console.error(error);
   }
 })();
 
-async function copyOPReturnsToDB(
+async function searchBlock(
   blockHash: string,
   opReturns: OPReturn[] = []
 ): Promise<void> {
@@ -32,14 +32,14 @@ async function copyOPReturnsToDB(
       return;
     }
 
-    if (opReturns.length > 150) {
+    if (opReturns.length > 1000) {
       await OPReturn.insert(opReturns);
       return; // <-- only taking first chunk of data because i've had to prune local blockchain
     }
 
     opReturns = getOPReturnsFromBlock(block, opReturns);
 
-    copyOPReturnsToDB(block.previousblockhash, opReturns);
+    searchBlock(block.previousblockhash, opReturns);
   } catch (error) {
     console.error(error);
   }

@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { OPReturn } from '../entities/OPReturn';
+import OPReturn from '../entities/OPReturn';
 
 const api = Router();
 

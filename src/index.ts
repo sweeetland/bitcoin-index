@@ -1,14 +1,13 @@
 import app from './app';
-import connectDatabase from './database/connect';
+import db from './database';
 import { PORT, NODE_ENV } from './config/env';
-import syncDatabaseWithBitcoind from './database/sync';
 
 (async () => {
   try {
-    const connection = await connectDatabase();
+    const connection = await db.connect();
     console.log('connected to db: ', connection.options.database);
 
-    if (NODE_ENV !== 'test') syncDatabaseWithBitcoind();
+    if (NODE_ENV !== 'test') db.syncWithBitcoind();
 
     app.listen(PORT, () => {
       console.log(`🚀 server started: http://localhost:${PORT}`);

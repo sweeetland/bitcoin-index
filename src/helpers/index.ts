@@ -1,6 +1,6 @@
 import { Block } from '../types/bitcoin';
 import { Transaction } from '../types/bitcoin';
-import { OPReturn } from '../entities/OPReturn';
+import OPReturn from '../entities/OPReturn';
 
 export const getOPReturnsFromBlock = (
   block: Block,
