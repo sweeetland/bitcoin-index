@@ -1,28 +1,32 @@
-import * as request from 'supertest';
+import * as request from 'supertest'
 
-import app from '../app';
-import { setupDatabase, shutdownDatabase, inputData } from './utils/shared';
+import app from '../app'
+import { setupDatabase, shutdownDatabase, inputData } from './utils/shared'
 
-beforeAll(setupDatabase);
+beforeAll(setupDatabase)
 
-afterAll(shutdownDatabase);
+afterAll(shutdownDatabase)
 
 test('GET /api/test - should return ok', async () => {
   await request(app)
     .get('/api/test')
-    .expect(200);
-});
+    .expect(200)
+})
 
-test('GET /api/opreturn/:op_return - should return ok', async () => {
+test('GET /api/opreturn/:opReturnData - should return ok', async () => {
   const res = await request(app)
     .get(`/api/opreturn/${inputData.body}`)
-    .expect(200);
+    .expect(200)
+
+  console.log('res.text: ', res.text)
 
   const output = {
     body: inputData.body,
     txhash: inputData.txhash,
     blockhash: inputData.blockhash
-  };
+  }
 
-  expect(JSON.parse(res.text)).toMatchObject([output]);
-});
+  console.log('output: ', output)
+
+  expect(JSON.parse(res.text)).toMatchObject([output])
+})

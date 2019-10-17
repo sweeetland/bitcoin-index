@@ -1,24 +1,23 @@
-import { Connection } from 'typeorm';
+import { Connection } from 'typeorm'
 
-import { OPReturn } from '../../entities/OPReturn';
-import connectDatabase from '../../database/connect';
+import OPReturn from '../../entities/OPReturn'
+import db from '../../database'
 
-let connection: Connection;
+let connection: Connection
 
 export const inputData = {
-  body: 'OP_RETURN testtestest',
+  body: 'testestestestest',
   txhash: 'txhashtxhashtxhash',
   blockhash: 'blockhashblockhashblockhash',
   blockheight: 1
-};
+}
 
 export const setupDatabase = async () => {
-  connection = await connectDatabase();
-  console.log('connected db: ', connection.options.database);
+  connection = await db.setup()
 
-  await OPReturn.clear();
+  await OPReturn.clear()
 
-  await OPReturn.insert(inputData);
-};
+  await OPReturn.insert(inputData)
+}
 
-export const shutdownDatabase = async () => await connection.close();
+export const shutdownDatabase = async () => await connection.close()

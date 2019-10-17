@@ -4,34 +4,34 @@ import {
   Column,
   BaseEntity,
   Index
-} from 'typeorm';
-import { BLOCKHEIGHT_INDEX } from '../config/env';
+} from 'typeorm'
+import { BLOCKHEIGHT_INDEX } from '../config/env'
 
 @Entity()
 export default class OPReturn extends BaseEntity {
   public constructor(data: any) {
-    super();
+    super()
     if (data) {
-      this.body = data.body;
-      this.txhash = data.txhash;
-      this.blockhash = data.blockhash;
-      this.blockheight = data.blockheight;
+      this.body = data.body
+      this.txhash = data.txhash
+      this.blockhash = data.blockhash
+      this.blockheight = data.blockheight
     }
   }
 
   @PrimaryGeneratedColumn()
-  id?: number;
+  id?: number
 
   @Index({ where: `"blockheight" > ${BLOCKHEIGHT_INDEX}` })
   @Column()
-  body: string;
+  body: string
 
   @Column()
-  txhash: string;
+  txhash: string
 
   @Column({ nullable: true })
-  blockhash?: string | undefined;
+  blockhash?: string | undefined
 
   @Column({ nullable: true })
-  blockheight?: number | undefined;
+  blockheight?: number | undefined
 }

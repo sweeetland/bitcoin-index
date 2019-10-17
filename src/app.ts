@@ -1,12 +1,14 @@
-// app instance is separate from index for testing purposes (supertest)
+import 'reflect-metadata'
+import * as express from 'express'
+import * as compression from 'compression'
+import * as morgan from 'morgan'
 
-import 'reflect-metadata';
-import * as express from 'express';
+import api from './routes/api'
 
-import api from './routes/api';
+const app = express()
 
-const app = express();
+app.use('/api', api)
+app.use(compression())
+app.use(morgan('short'))
 
-app.use('/api', api);
-
-export { app as default };
+export { app as default }
