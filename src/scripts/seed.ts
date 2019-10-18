@@ -3,29 +3,21 @@ import OPReturn from '../entities/OPReturn'
 import findOPReturns from '../utils/findOPReturns'
 import { Block, ChainInfo } from '../types/bitcoin'
 import db from '../database'
+import chunk from '../utils/chunk'
 
-async function searchBlock(
-  blockHash: string,
-  opReturns: OPReturn[] = []
-): Promise<void> {
-  try {
-    const block: Block = await bitcoin('getblock', [blockHash, 2])
+async function* traverseBlockchain() {
+  const genesisBlockhash: string = await bitcoin('getblockhash', [0])
 
-    if (block.height === 0) {
-      await OPReturn.insert(opReturns)
-      return
-    }
+  const blockChainInfo: ChainInfo = await bitcoin('getblockchaininfo')
 
-    if (opReturns.length > 1000) {
-      await OPReturn.insert(opReturns)
-      return // <-- only taking first chunk of data because i've had to prune local blockchain
-    }
+  let blockhash = blockChainInfo.bestblockhash
 
-    opReturns = findOPReturns(block, opReturns)
+  while (blockhash !== genesisBlockhash) {
+    const block: Block = await bitcoin('getblock', [blockhash, 2])
 
-    searchBlock(block.previousblockhash, opReturns)
-  } catch (error) {
-    console.error(error)
+    blockhash = block.previousblockhash
+
+    yield block
   }
 }
 
@@ -37,9 +29,31 @@ async function searchBlock(
 
     await OPReturn.clear()
 
-    const blockChainInfo: ChainInfo = await bitcoin('getblockchaininfo')
+    let opReturns: OPReturn[] = []
 
-    await searchBlock(blockChainInfo.bestblockhash)
+    for await (const block of traverseBlockchain()) {
+      opReturns = findOPReturns(block, opReturns)
+
+      const numberOfRecords = opReturns.length
+
+      if (numberOfRecords > 10000) {
+        const batches = chunk(opReturns, 5000)
+
+        for (const batch of batches) {
+          console.log(`saving ${batch.length} records to db...`)
+
+          await OPReturn.insert(batch)
+        }
+
+        opReturns = []
+      } else if (numberOfRecords > 5000) {
+        console.log(`saving ${numberOfRecords} records to db...`)
+
+        await OPReturn.insert(opReturns)
+
+        opReturns = []
+      }
+    }
   } catch (error) {
     console.error(error)
   }

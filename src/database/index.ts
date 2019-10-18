@@ -17,6 +17,7 @@ class DB {
 
     return connection
   }
+
   private connect = async (): Promise<Connection> => {
     try {
       return await createConnection({
@@ -39,11 +40,10 @@ class DB {
   private syncWithBitcoind = async (): Promise<void> => {
     try {
       const socket = zmq.socket('sub')
-      const address = ZMQ_URL
 
-      socket.connect(address)
+      socket.connect(ZMQ_URL)
 
-      socket.subscribe('hash')
+      socket.subscribe('hashblock')
 
       console.log('listening for updates from bitcoind...')
 
