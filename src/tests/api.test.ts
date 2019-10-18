@@ -1,7 +1,7 @@
 import * as request from 'supertest'
 
 import app from '../app'
-import { setupDatabase, shutdownDatabase, inputData } from './utils/shared'
+import { setupDatabase, shutdownDatabase, inputData } from './test-utils/shared'
 
 beforeAll(setupDatabase)
 
@@ -18,15 +18,11 @@ test('GET /api/opreturn/:opReturnData - should return ok', async () => {
     .get(`/api/opreturn/${inputData.body}`)
     .expect(200)
 
-  console.log('res.text: ', res.text)
-
   const output = {
     body: inputData.body,
     txhash: inputData.txhash,
     blockhash: inputData.blockhash
   }
-
-  console.log('output: ', output)
 
   expect(JSON.parse(res.text)).toMatchObject([output])
 })
