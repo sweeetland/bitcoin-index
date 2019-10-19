@@ -1,9 +1,20 @@
 import * as request from 'supertest'
 
 import app from '../app'
-import { setupDatabase, shutdownDatabase, inputData } from './test-utils/shared'
+import { setupDatabase, shutdownDatabase } from './test-utils/shared'
+import OPReturn from '../entities/OPReturn'
 
-beforeAll(setupDatabase)
+export const inputData = {
+  body: 'testestestestest',
+  txhash: 'txhashtxhashtxhash',
+  blockhash: 'blockhashblockhashblockhash',
+  blockheight: 1
+}
+
+beforeAll(async () => {
+  await setupDatabase()
+  OPReturn.insert(inputData)
+})
 
 afterAll(shutdownDatabase)
 
