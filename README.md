@@ -24,19 +24,17 @@ If you're using the mainnet, index higher than the blockheight 500,000. If you'r
 
 ## Setup
 
-First make sure to install Node.js ([here](https://nodejs.org/en/download/)), Postgresql ([here](https://www.postgresql.org/download/)) and Bitcoin Core ([here](https://bitcoin.org/en/download)). Be sure to check the requirements for Bitcoin Core because it is very large! 🧨
+First make sure to install Node.js v12 ([here](https://nodejs.org/en/download/)), Postgresql v11 ([here](https://www.postgresql.org/download/)) and Bitcoin Core ([here](https://bitcoin.org/en/download)). Be sure to check the requirements for Bitcoin Core because it is very large! 🧨
 
-Clone the repo and cd into project root
+Clone the repo and cd into project root.
 
-### Environments:
-
-Currently the app supports a development and test environment. Create a dev.env and test.env in src/config
+Currently the app supports a development and test environment. Before you start you will need to setup environment variables for each environment. Create a dev.env and test.env in src/config
 
 ```
 touch src/config/dev.env src/config/test.env
 ```
 
-The env variables to set in each file are:
+The env variables to set in each file should be pretty straightforward and are listed below.
 
 ```
 NODE_ENV=development || test
@@ -51,41 +49,51 @@ DB_NAME=
 DB_PORT=5432
 
 ZMQ_URL=tcp://127.0.0.1:3000
+
+BLOCKHEIGHT_INDEX=1000000
 ```
 
-### bitcoin.conf:
+Bitcoin Core is the primary software for the Bitcoin protocol. Our Node server needs to be able to communicate with bitcoind to seed the database and to listen for new blocks. Fortunately, Bitcoin has a RPC API which will allow us to do this.
 
-The RPC env variables declared above must match what is declared here to create a connection to bitcoind.
+The RPC env variables declared above must match what is declared here to create a connection to bitcoind. Your bitcoin.conf should look somethhing like this.
 
 ```
 rpcuser=bitcoinuser
 rpcpassword=bitcoinpassword
+tindex=1
 
 # The address here is the URL where bitcoind will listen for new ZeroMQ connection requests.
 zmqpubhashblock=tcp://127.0.0.1:3000
 zmqpubhashtx=tcp://127.0.0.1:3000
 ```
 
-Next install dependancies with:
+Once you have changed your bitcoin.conf file. Restart bitcoind and then you should be ready to install the dependancies.
 
 ```
 npm install
 ```
 
-Seed the dev database:
+It's always a good idea to test.
+```
+npm run test
+```
+
+These tests will verify that your connections are setup correctly and that bitcoind is fully synced with tindex enabled.
+
+Once all tests are passing you should be ready to seed the database, go away and do something else, it will take a while (~8 hours / 32 million records at the time of writing this)...
 
 ```
-npm run seed:db
+npm run db:seed
 ```
 
-Start the dev server and listen for updates from bitcoind:
+While seeding the database we also listen for new blocks. When the database has been seeded we can create the index
+
+```
+npm run db:migrate
+```
+
+When the database has finished seeding the server will start automatically. But if you would like to start the server manually you can run.
 
 ```
 npm start
-```
-
-Run automated tests in the test environment:
-
-```
-npm run test
 ```
