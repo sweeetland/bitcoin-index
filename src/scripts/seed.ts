@@ -3,7 +3,7 @@ import OPReturn from '../entities/OPReturn'
 import findOPReturns from '../utils/findOPReturns'
 import { Block, ChainInfo } from '../types/bitcoin'
 import db from '../database'
-import chunk from '../utils/chunk'
+import startServer from '../utils/startServer'
 
 async function* traverseBlockchain() {
   const genesisBlockhash: string = await bitcoin('getblockhash', [0])
@@ -36,17 +36,7 @@ async function* traverseBlockchain() {
 
       const numberOfRecords = opReturns.length
 
-      if (numberOfRecords > 10000) {
-        const batches = chunk(opReturns, 5000)
-
-        for (const batch of batches) {
-          console.log(`saving ${batch.length} records to db...`)
-
-          await OPReturn.insert(batch)
-        }
-
-        opReturns = []
-      } else if (numberOfRecords > 5000) {
+      if (numberOfRecords > 5000) {
         console.log(`saving ${numberOfRecords} records to db...`)
 
         await OPReturn.insert(opReturns)
@@ -54,6 +44,12 @@ async function* traverseBlockchain() {
         opReturns = []
       }
     }
+
+    await OPReturn.insert(opReturns)
+
+    console.log('seeding finished. 🎈')
+
+    startServer()
   } catch (error) {
     console.error(error)
   }
