@@ -6,7 +6,7 @@ import OPReturn from '../entities/OPReturn'
 
 const decoder = new StringDecoder('utf8')
 
-export const decode = (str: string): string =>
+const decode = (str: string): string =>
   decoder.write(Buffer.from(str, 'hex')).replace(/[^\x20-\x7E]+/g, '')
 
 const findOPReturns = (block: Block, opReturns: OPReturn[]): OPReturn[] => {

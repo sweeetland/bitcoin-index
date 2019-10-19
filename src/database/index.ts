@@ -1,7 +1,7 @@
 import { createConnection, Connection } from 'typeorm'
 import * as zmq from 'zeromq'
 
-import { DB_PORT, DB_USER, DB_NAME, NODE_ENV, ZMQ_URL } from '../config/env'
+import { NODE_ENV, ZMQ_URL } from '../config/env'
 import bitcoin from '../services/bitcoin'
 import findOPReturns from '../utils/findOPReturns'
 import { Block } from '../types/bitcoin'
@@ -9,32 +9,13 @@ import OPReturn from '../entities/OPReturn'
 
 class DB {
   setup = async (): Promise<Connection> => {
-    const connection = await this.connect()
+    const connection = await createConnection()
 
     console.log('connected to db: ', connection.options.database)
 
     if (NODE_ENV !== 'test') this.syncWithBitcoind()
 
     return connection
-  }
-
-  private connect = async (): Promise<Connection> => {
-    try {
-      return await createConnection({
-        type: 'postgres',
-        host: 'localhost',
-        port: DB_PORT,
-        username: DB_USER,
-        password: '',
-        database: DB_NAME,
-        synchronize: true,
-        logging: NODE_ENV === 'development',
-        dropSchema: NODE_ENV === 'test',
-        entities: ['src/entities/*.*']
-      })
-    } catch (error) {
-      console.error(error)
-    }
   }
 
   private syncWithBitcoind = async (): Promise<void> => {

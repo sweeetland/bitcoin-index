@@ -5,6 +5,8 @@
   "scripts": {
     "start": "env-cmd -f ./src/config/dev.env ts-node-dev --respawn --clear --no-notify src/index.ts",
     "db:seed": "env-cmd -f ./src/config/dev.env ts-node ./src/scripts/seed.ts",
+    "db:migrate": "env-cmd -f ./src/config/dev.env ts-node ./node_modules/typeorm/cli.js migration:run",
+    "db:revert": "env-cmd -f ./src/config/dev.env ts-node ./node_modules/typeorm/cli.js migration:revert",
     "test": "env-cmd -f ./src/config/test.env jest --watch --runInBand"
   },
   "jest": {
