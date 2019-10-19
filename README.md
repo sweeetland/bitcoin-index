@@ -92,7 +92,7 @@ While seeding the database we also listen for new blocks. When the database has 
 npm run db:migrate
 ```
 
-When the database has finished seeding the server will start automatically. But if you would like to start the server manually you can run.
+When the database has finished seeding the server we can start the server.
 
 ```
 npm start

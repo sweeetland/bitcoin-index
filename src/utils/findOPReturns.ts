@@ -11,9 +11,11 @@ const decode = (str: string): string =>
 
 const findOPReturns = (block: Block, opReturns: OPReturn[]): OPReturn[] => {
   console.log(`searching block #:${block.height}...`)
+
   block.tx.forEach((tx: Transaction) => {
     tx.vout.forEach(vout => {
       const asm = vout.scriptPubKey.asm
+
       if (asm.includes('OP_RETURN')) {
         opReturns.push(
           new OPReturn({

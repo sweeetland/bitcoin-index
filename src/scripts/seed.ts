@@ -3,7 +3,6 @@ import OPReturn from '../entities/OPReturn'
 import findOPReturns from '../utils/findOPReturns'
 import { Block, ChainInfo } from '../types/bitcoin'
 import db from '../database'
-import startServer from '../utils/startServer'
 
 async function* traverseBlockchain() {
   const genesisBlockhash: string = await bitcoin('getblockhash', [0])
@@ -48,8 +47,6 @@ async function* traverseBlockchain() {
     await OPReturn.insert(opReturns)
 
     console.log('seeding finished. 🎈')
-
-    startServer()
   } catch (error) {
     console.error(error)
   }
