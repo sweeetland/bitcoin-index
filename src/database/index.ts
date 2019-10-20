@@ -4,7 +4,6 @@ import * as zmq from 'zeromq'
 import { NODE_ENV, ZMQ_URL } from '../config/env'
 import { bitcoin } from '../services/bitcoin'
 import { findOPReturns } from '../utils/findOPReturns'
-import { Block } from '../types/bitcoin'
 import { OPReturn } from '../entities/OPReturn'
 
 class DB {
@@ -34,7 +33,7 @@ class DB {
 
         if (messageType === 'hashblock') {
           console.log('message received: new block')
-          const block: Block = await bitcoin('getblock', [hash, 2])
+          const block = await bitcoin.getBlock(hash, 2)
 
           let opReturns: OPReturn[] = []
           opReturns = findOPReturns(block, opReturns)

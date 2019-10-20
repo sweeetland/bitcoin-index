@@ -4,7 +4,7 @@ import { ChainInfo } from '../types/bitcoin'
 let blockChainInfo: ChainInfo
 
 beforeAll(async () => {
-  blockChainInfo = await bitcoin('getblockchaininfo')
+  blockChainInfo = await bitcoin.getBlockChainInfo()
 })
 
 test('should connect to bitcoind', async () => {

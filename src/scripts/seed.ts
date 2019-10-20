@@ -1,23 +1,23 @@
 import { bitcoin } from '../services/bitcoin'
 import { OPReturn } from '../entities/OPReturn'
 import { findOPReturns } from '../utils/findOPReturns'
-import { Block, ChainInfo } from '../types/bitcoin'
 import { db } from '../database'
 
 async function* traverseBlockchain() {
-  const genesisBlockhash: string = await bitcoin('getblockhash', [0])
+  const genesisBlockhash = await bitcoin.getBlockHash(0)
 
-  const blockChainInfo: ChainInfo = await bitcoin('getblockchaininfo')
+  const blockChainInfo = await bitcoin.getBlockChainInfo()
 
   let blockhash = blockChainInfo.bestblockhash
 
   while (blockhash !== genesisBlockhash) {
-    const block: Block = await bitcoin('getblock', [blockhash, 2])
+    const block = await bitcoin.getBlock(blockhash, 2)
 
     blockhash = block.previousblockhash
 
     yield block
   }
+  return
 }
 
 ;(async () => {
