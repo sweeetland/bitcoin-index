@@ -1,4 +1,4 @@
-import bitcoin from '../services/bitcoin'
+import { bitcoin } from '../services/bitcoin'
 import { ChainInfo } from '../types/bitcoin'
 
 let blockChainInfo: ChainInfo

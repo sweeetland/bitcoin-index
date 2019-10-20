@@ -1,8 +1,8 @@
 import { Router, Request, Response } from 'express'
 
-import OPReturn from '../entities/OPReturn'
+import { OPReturn } from '../entities/OPReturn'
 
-const api = Router()
+export const api = Router()
 
 api.get('/test', (req: Request, res: Response) =>
   res.json({ msg: 'api online!' })
@@ -30,5 +30,3 @@ api.get('/opreturn/:opReturnData', async (req: Request, res: Response) => {
     return res.status(500).send('Ooops, something went wrong there!')
   }
 })
-
-export { api as default }

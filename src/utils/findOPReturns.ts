@@ -2,14 +2,17 @@ import { StringDecoder } from 'string_decoder'
 
 import { Block } from '../types/bitcoin'
 import { Transaction } from '../types/bitcoin'
-import OPReturn from '../entities/OPReturn'
+import { OPReturn } from '../entities/OPReturn'
 
 const decoder = new StringDecoder('utf8')
 
 const decode = (str: string): string =>
   decoder.write(Buffer.from(str, 'hex')).replace(/[^\x20-\x7E]+/g, '')
 
-const findOPReturns = (block: Block, opReturns: OPReturn[]): OPReturn[] => {
+export const findOPReturns = (
+  block: Block,
+  opReturns: OPReturn[]
+): OPReturn[] => {
   console.log(`searching block #:${block.height}...`)
 
   block.tx.forEach((tx: Transaction) => {
@@ -31,5 +34,3 @@ const findOPReturns = (block: Block, opReturns: OPReturn[]): OPReturn[] => {
 
   return opReturns
 }
-
-export { findOPReturns as default }

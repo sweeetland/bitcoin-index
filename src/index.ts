@@ -1,5 +1,5 @@
-import app from './app'
-import db from './database'
+import { db } from './database'
+import { app } from './app'
 import { PORT } from './config/env'
 ;(async () => {
   try {

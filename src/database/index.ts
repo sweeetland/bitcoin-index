@@ -2,10 +2,10 @@ import { createConnection, Connection } from 'typeorm'
 import * as zmq from 'zeromq'
 
 import { NODE_ENV, ZMQ_URL } from '../config/env'
-import bitcoin from '../services/bitcoin'
-import findOPReturns from '../utils/findOPReturns'
+import { bitcoin } from '../services/bitcoin'
+import { findOPReturns } from '../utils/findOPReturns'
 import { Block } from '../types/bitcoin'
-import OPReturn from '../entities/OPReturn'
+import { OPReturn } from '../entities/OPReturn'
 
 class DB {
   setup = async (): Promise<Connection> => {
@@ -48,4 +48,4 @@ class DB {
   }
 }
 
-export default new DB()
+export const db = new DB()

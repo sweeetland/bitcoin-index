@@ -1,10 +1,10 @@
 import * as request from 'supertest'
 
-import app from '../app'
+import { app } from '../app'
 import { setupDatabase, shutdownDatabase } from './test-utils/shared'
-import OPReturn from '../entities/OPReturn'
+import { OPReturn } from '../entities/OPReturn'
 
-export const inputData = {
+const inputData = {
   body: 'testestestestest',
   txhash: 'txhashtxhashtxhash',
   blockhash: 'blockhashblockhashblockhash',

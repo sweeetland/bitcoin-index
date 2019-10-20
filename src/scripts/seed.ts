@@ -1,8 +1,8 @@
-import bitcoin from '../services/bitcoin'
-import OPReturn from '../entities/OPReturn'
-import findOPReturns from '../utils/findOPReturns'
+import { bitcoin } from '../services/bitcoin'
+import { OPReturn } from '../entities/OPReturn'
+import { findOPReturns } from '../utils/findOPReturns'
 import { Block, ChainInfo } from '../types/bitcoin'
-import db from '../database'
+import { db } from '../database'
 
 async function* traverseBlockchain() {
   const genesisBlockhash: string = await bitcoin('getblockhash', [0])

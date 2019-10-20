@@ -8,7 +8,7 @@ import {
 
 @Entity()
 @Index('body_idx', { synchronize: false })
-export default class OPReturn extends BaseEntity {
+export class OPReturn extends BaseEntity {
   public constructor(data: any) {
     super()
     if (data) {

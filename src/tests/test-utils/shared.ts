@@ -1,7 +1,7 @@
 import { Connection } from 'typeorm'
 
-import OPReturn from '../../entities/OPReturn'
-import db from '../../database'
+import { OPReturn } from '../../entities/OPReturn'
+import { db } from '../../database'
 
 let connection: Connection
 
